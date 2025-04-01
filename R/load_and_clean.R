@@ -2,6 +2,7 @@
 
 library(dplyr)
 library(readr)
+library(tidyr)
 
 
 #import data
@@ -36,5 +37,58 @@ colSums(is.na(landclass))
 #we removed these two columns ->too much missing values -> wont use it with analyzing fires therefore, their presence would only unnecessarily complicate further data processing and modeling. 
 wildfires <- wildfires %>% select(-Std_confidence, -Var_confidence)
 
+names(wildfires)  # izpiše imena stolpcev – ne bi smelo biti več "Std_confidence" in "Var_confidence"
+
+
+# Format dates to a common format
+wildfires$Date <- format(as.Date(wildfires$Date, format = "%m/%d/%Y"), "%Y-%m-%d")
+ndvi$Date <- format(as.Date(ndvi$Date, format = "%m/%d/%Y"), "%Y-%m-%d")
+weather$Date <- as.character(weather$Date)
+forecasts$Date <- as.character(forecasts$Date)
+
+names(forecasts) <- names(forecasts) %>%
+  gsub("count\\(\\)\\[unit: km\\^2\\]", "count_km2", .) %>%
+  gsub("min\\(\\)", "min_val", .) %>%
+  gsub("max\\(\\)", "max_val", .) %>%
+  gsub("mean\\(\\)", "mean_val", .) %>%
+  gsub("variance\\(\\)", "var_val", .)
+
+names(weather) <- names(weather) %>%
+  gsub("count\\(\\)\\[unit: km\\^2\\]", "count_km2", .) %>%
+  gsub("min\\(\\)", "min_val", .) %>%
+  gsub("max\\(\\)", "max_val", .) %>%
+  gsub("mean\\(\\)", "mean_val", .) %>%
+  gsub("variance\\(\\)", "var_val", .)
+
+
+weather_wide <- weather %>%
+  filter(Parameter %in% c("Temperature", "Precipitation", "RelativeHumidity", "WindSpeed")) %>%
+  pivot_wider(names_from = Parameter, values_from = c(count_km2, min_val, max_val, mean_val, var_val))
+
+
+forecasts_wide <- forecasts %>%
+  filter(Parameter %in% c("Temperature", "Precipitation", "RelativeHumidity", "WindSpeed"),
+         `Lead time` == 5) %>%
+  pivot_wider(names_from = Parameter, values_from = c(count_km2, min_val, max_val, mean_val, var_val))
+
+# Join all data together based on Region and Date
+combined_data <- wildfires %>%
+  left_join(weather_wide, by = c("Region", "Date")) %>%
+  left_join(forecasts_wide, by = c("Region", "Date")) %>%
+  left_join(ndvi, by = c("Region", "Date")) %>%
+  left_join(landclass, by = "Region")
+
+# Explanation:
+# We used left_join because the wildfires dataset is our primary data source,
+# and we want to keep all wildfire records while adding matching information from other
+# datasets (like weather, forecasts, NDVI, and land class). If a match is not found in the other datasets,
+# the wildfire record is still kept, and the new columns will contain NA.
+
+# Diagnostics
+dim(wildfires)        # Original number of rows
+dim(combined_data)    # Should match if no one-to-many joins happened
+
+# Missing values
+colSums(is.na(combined_data))
 
 
