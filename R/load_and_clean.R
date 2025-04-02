@@ -92,3 +92,9 @@ dim(combined_data)    # Should match if no one-to-many joins happened
 colSums(is.na(combined_data))
 
 
+head(weather)
+
+head(weather_wide)
+
+
+
