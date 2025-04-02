@@ -97,4 +97,12 @@ head(weather)
 head(weather_wide)
 
 
+# Filtriraj samo podatke od leta 2017 naprej
+combined_data <- combined_data %>%
+  filter(as.Date(Date) >= as.Date("2017-01-01"))
+
+
+nrow(combined_data)
+range(as.Date(combined_data$Date))
+
 
