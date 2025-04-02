@@ -105,4 +105,26 @@ combined_data <- combined_data %>%
 nrow(combined_data)
 range(as.Date(combined_data$Date))
 
+# Število manjkajočih vrednosti po stolpcih
+na_counts <- colSums(is.na(combined_data))
+na_counts[na_counts > 0]
 
+# Odstotek manjkajočih vrednosti po stolpcih
+na_percent <- colMeans(is.na(combined_data)) * 100
+na_percent[na_percent > 0]
+
+
+
+# Odstrani forecast .y stolpce in NDVI (več kot 50–90% manjkajočih)
+combined_data_clean <- combined_data %>%
+  select(-contains(".y"),
+         -"Lead time",
+         -starts_with("Vegetation_index"))
+
+
+
+# (Neobvezno) ponovno preveri dimenzije
+dim(combined_data_clean)
+
+# Preveri NA vrednosti
+colSums(is.na(combined_data_clean))
