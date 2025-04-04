@@ -75,3 +75,6 @@ legend("bottomright",
 
 # 10. Save PCA result
 save(pca_result, rows_no_na, file = "pca_output.RData")
+save(combined_data_clean, filtered_data, rows_no_na,
+     file = "data/final_data.RData")
+
