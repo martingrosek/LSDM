@@ -130,6 +130,10 @@ dim(combined_data_clean)
 # Preveri NA vrednosti
 colSums(is.na(combined_data_clean))
 
+# Dodaj log-transformirano ciljno spremenljivko
+combined_data_clean$log_estimated_fire_area <- log1p(combined_data_clean$Estimated_fire_area)
+
+
 write_csv(combined_data_clean, "combined_data_clean.csv")
 
 
