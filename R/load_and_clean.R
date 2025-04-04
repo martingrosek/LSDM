@@ -33,6 +33,7 @@ colSums(is.na(forecasts))
 colSums(is.na(ndvi))
 colSums(is.na(landclass))
 
+nrow(semi_join(forecasts_wide, wildfires, by = c("Region", "Date")))
 
 #we removed these two columns ->too much missing values -> wont use it with analyzing fires therefore, their presence would only unnecessarily complicate further data processing and modeling. 
 wildfires <- wildfires %>% select(-Std_confidence, -Var_confidence)
@@ -115,11 +116,11 @@ na_percent[na_percent > 0]
 
 
 
-# Odstrani forecast .y stolpce in NDVI (več kot 50–90% manjkajočih)
+ #Odstrani forecast .y stolpce in NDVI (več kot 50–90% manjkajočih)
 combined_data_clean <- combined_data %>%
   select(-contains(".y"),
-         -"Lead time",
-         -starts_with("Vegetation_index"))
+       -"Lead time",
+        -starts_with("Vegetation_index"))
 
 
 
@@ -128,3 +129,10 @@ dim(combined_data_clean)
 
 # Preveri NA vrednosti
 colSums(is.na(combined_data_clean))
+
+write_csv(combined_data_clean, "combined_data_clean.csv")
+
+
+
+names(combined_data_clean)
+
