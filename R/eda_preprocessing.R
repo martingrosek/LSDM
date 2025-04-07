@@ -10,10 +10,15 @@ str(combined_data_clean)
 summary(combined_data_clean)
 
 # 2. Izlušči numerične stolpce
+#correlation analysis only works on numeric data. Categorical variables or text values 
+#do not allow correlation calculations and would cause errors.
 numeric_cols <- sapply(combined_data_clean, is.numeric)
 combined_numeric <- combined_data_clean[, numeric_cols]
 
 # 3. Odstrani stolpce s standardnim odklonom 0 (konstante)
+#If a variable has the same value in all rows, it has no informative value for the analysis – 
+#it cannot contribute to explaining the variance or improving the model we removed them to
+#reduce dimensionality, speed up calculations, avoid numerical problems in PCA or correlation 
 sds <- apply(combined_numeric, 2, sd, na.rm = TRUE)
 combined_numeric_filtered <- combined_numeric[, sds > 0]
 
@@ -85,4 +90,26 @@ hist(combined_data_clean$mean_val_Temperature.x, breaks = 50, main = "Avg Temper
 # 10. Barplot po regijah
 barplot(table(combined_data_clean$Region), main = "Požari po regijah", las = 2, col = "salmon")
 
-# (Neobvezno) shrani slike za poročilo z ggsave() če uporabljaš ggplot2
+
+
+
+
+barplot(
+  height = sort(top5_original),
+  names.arg = c(
+    "Count",
+    "log_estimated_fire_area",
+    "Radiative Power",
+    "Brightness",
+    "Rel. Humidity"
+  ),
+  main = "Top 5 koreliranih spremenljivk s Estimated_fire_area",
+  col = ifelse(sort(top5_original) > 0, "steelblue", "tomato"),
+  horiz = TRUE,
+  las = 1,
+  xlab = "Pearsonova korelacija",
+  cex.names = 1,
+  cex.axis = 1,
+  xlim = c(-0.4, 1)  # razširi os x, če želiš več prostora
+)
+
