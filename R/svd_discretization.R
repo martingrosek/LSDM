@@ -48,11 +48,13 @@ write.csv(combined_data_discretized_unsupervised, "unsupervised_discretized_data
 class_column <- as.factor(ifelse(combined_data_clean$Estimated_fire_area > 0, "YES", "NO"))
 
 mdlp_input <- combined_data_clean %>%
-  select(-Estimated_fire_area)
+  select(-Estimated_fire_area) %>%
+  select(where(~ var(., na.rm = TRUE) > 0)) %>%
+  mutate(across(everything(), ~ as.numeric(.)))
 
-mdlp_input <- mdlp_input[, sapply(mdlp_input, function(x) length(unique(x)) > 1)]
+mdlp_input$Class <- class_column
 
-mdlp_input <- cbind(mdlp_input, Class = class_column)
+mdlp_input <- as.data.frame(mdlp_input)
 
 mdlp_result <- mdlp(mdlp_input)
 
