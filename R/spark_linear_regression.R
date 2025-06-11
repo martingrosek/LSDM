@@ -31,10 +31,18 @@ for (col in numeric_cols) {
   }
 }
 
-# 4. Split data
-splits <- sdf_random_split(spark_df, train = 0.7, test = 0.3, seed = 42)
-train_tbl <- splits$train
-test_tbl <- splits$test
+# 1. After split, define features:
+features <- setdiff(
+  colnames(train_tbl),
+  c("Estimated_fire_area", "log_estimated_fire_area", "Region", "Date", "area_bin", "Replaced")
+)
+
+# 2. Remove rows with NA in any used feature or the target
+train_tbl_clean <- train_tbl %>%
+  filter_at(vars(one_of(c(features, "Estimated_fire_area"))), all_vars(!is.na(.)))
+
+test_tbl_clean <- test_tbl %>%
+  filter_at(vars(one_of(c(features, "Estimated_fire_area"))), all_vars(!is.na(.)))
 
 # 5. Feature selection
 features <- setdiff(
