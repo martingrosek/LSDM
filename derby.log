@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Wed Jun 11 08:52:20 WEST 2025:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0197-5df9-c976-00000829e640 
-on database directory memory:/Users/martingrosek/Desktop/Erasmus_predmeti/LSDM/project/LSDM/databaseName=metastore_db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@42110406 
-Loaded from file:/Users/martingrosek/spark/spark-3.4.0-bin-hadoop3/jars/derby-10.14.2.0.jar
-java.vendor=Eclipse Adoptium
-java.runtime.version=11.0.26+4
-user.dir=/Users/martingrosek/Desktop/Erasmus_predmeti/LSDM/project/LSDM
-os.name=Mac OS X
-os.arch=x86_64
-os.version=13.7.6
+Wed Jun 11 18:00:35 BST 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0197-5fef-b843-0000082573e0 
+on database directory memory:D:\FAKS\MAG 2. letnik\LSDM\databaseName=metastore_db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5f4da5c3 
+Loaded from file:/C:/Users/urban/AppData/Local/spark/spark-3.4.1-bin-hadoop3/jars/derby-10.14.2.0.jar
+java.vendor=OpenLogic
+java.runtime.version=11.0.26+4-adhoc..jdk11u
+user.dir=D:\FAKS\MAG 2. letnik\LSDM
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

@@ -4,7 +4,7 @@ library(sparklyr)
 library(dplyr)
 
 
-#spark_install(version = "3.4.0")
+#spark_install(version = "3.4.1")
 
 
 
@@ -25,8 +25,16 @@ spark_df <- spark_read_csv(
 )
 
 
+# Najprej določimo imena numeric stolpcev
+features <- setdiff(
+  colnames(spark_df),
+  c("Estimated_fire_area", "log_estimated_fire_area", "Region", "Date", "area_bin", "Replaced")
+)
+
+# Pretvorba v numeric
 spark_df <- spark_df %>%
   mutate(across(all_of(features), ~ as.numeric(.)))
+
 
 
 
